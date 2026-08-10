@@ -1,0 +1,12 @@
+{
+  "schema": "glaciereq.repo-capabilities.v1",
+  "repository": "GlacierEQ/coreweave-rack-power-autopilot",
+  "capabilities": [
+    {
+      "id": "rack-power-autopilot",
+      "name": "Rack Power Autopilot",
+      "status": "SCAFFOLD",
+      "module": "src/rack_power_autopilot.py"
+    }
+  ]
+}

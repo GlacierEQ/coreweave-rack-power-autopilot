@@ -1,0 +1,31 @@
+{
+  "schema": "glaciereq.proof-receipt.v1",
+  "repository": "GlacierEQ/coreweave-rack-power-autopilot",
+  "source_sha": "e49984e4a49022da66b099aca162da2af6471359e8b16ad014a732d12d7c6747",
+  "proof_id": "elite-coreweave-rack-power-autopilot-1786356649",
+  "environment": {
+    "python": "/Users/kcbflux/.local/bin/python3.11",
+    "PYTHONPATH": "/Users/kcbflux/GlacierEQ_Swarm/job-app/repos/coreweave-rack-power-autopilot:/Users/kcbflux/GlacierEQ_Swarm/job-app/repos/coreweave-rack-power-autopilot/src",
+    "entry": "unittest"
+  },
+  "tests": [
+    "/Users/kcbflux/.local/bin/python3.11 -m unittest discover -s tests -v (x2)"
+  ],
+  "adversarial_tests": [
+    "tests/test_adversarial.py"
+  ],
+  "runtime": {
+    "operate": "scripts/operate.py (x2)",
+    "dual_run_ok": true,
+    "proof_dual_run_ok": true
+  },
+  "result": "PASS",
+  "limitations": [
+    "not production deployed",
+    "reference implementation only"
+  ],
+  "timestamp": "2026-08-10T10:10Z",
+  "artifact_hashes": {
+    "operability_receipt": "f9807e91aebf70d42898dac97386772dc90f135a6821d621c9d6c836f8deb541"
+  }
+}

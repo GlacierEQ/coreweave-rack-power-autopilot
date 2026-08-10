@@ -1,0 +1,10 @@
+[project]
+name = "coreweave-rack-power-autopilot"
+version = "0.0.1"
+description = "Scaffold: Rack Power Autopilot (independent CoreWeave lens)"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
