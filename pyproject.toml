@@ -1,9 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "coreweave-rack-power-autopilot"
-version = "0.0.1"
-description = "Scaffold: Rack Power Autopilot (independent CoreWeave lens)"
+version = "1.0.0"
+description = "Telemetry-driven rack power derating and job admission controller"
 requires-python = ">=3.11"
 dependencies = []
+
+[project.scripts]
+rack-power-autopilot = "rack_power_cli:main"
+
+[tool.setuptools]
+py-modules = ["rack_power_autopilot", "rack_power_cli", "promotion_authority"]
+package-dir = {"" = "src"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
