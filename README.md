@@ -1,51 +1,52 @@
 # Rack Power Autopilot
 
-Independent GlacierEQ portfolio exhibit aligned to **CoreWeave** operating themes.
+Independent GlacierEQ portfolio implementation aligned to **CoreWeave** operating themes.
 
-> **Not affiliated.** This repository is not affiliated with, endorsed by, employed by, or deployed at CoreWeave.
-> No proprietary access, production deployment, customer impact, or company partnership is claimed.
+> **Not affiliated.** This repository is not affiliated with, endorsed by, employed by, or deployed at CoreWeave. No proprietary access, production deployment, customer impact, or company partnership is claimed.
 
-## Bottleneck (GlacierEQ hypothesis)
+## Purpose
 
-Power, hardware reliability, scheduling, checkpointing, recovery, and utilization at cluster scale.
+Turn power, thermal, hardware-reliability, and telemetry freshness signals into **hard job-admission decisions** instead of treating rack capacity as a static number.
 
-**Brick wall:** Maintaining economic and operational reliability amid component failures and huge infrastructure expansion.
+## Implemented system
 
-**Observed public pressure (snapshot hypothesis):** AI clouds must operate mega-clusters across training, inference, observability, and rapidly expanding data-center capacity.
+`RackPowerAutopilot` computes a safe rack envelope before admitting work:
 
-## Innovation mechanism
+- fails closed on stale telemetry or an already-overlimit rack;
+- refuses admission at the thermal ceiling or critical failed-GPU fraction;
+- derates available power as thermal headroom narrows, ECC errors rise, or hardware fails;
+- sorts jobs deterministically by priority, checkpointability, power request, and id;
+- fully admits jobs that fit the safe envelope;
+- permits partial/derated admission only for checkpointable + preemptible jobs whose declared minimum power fraction remains satisfied;
+- exposes rejected jobs and reason codes rather than silently oversubscribing.
 
-**Rack Power Autopilot** — Close the loop from power/thermal telemetry to job admission decisions with hard refuse states.
+The receipt reports derate factor, derate reasons, admitted allocations, rejected work, remaining safe kW, and a deterministic digest.
 
-## Target roles
+## Run
 
-- Applied AI Systems Architect
-- Forward-Deployed Engineer
-- AI Infrastructure / Governance Engineer
+```bash
+python -m pytest -q
+python scripts/operate.py
+```
 
-## Application move
+Build and install:
 
-Build a failure-and-recovery topology case study around the GPU health system.
+```bash
+python -m pip install build
+python -m build
+python -m pip install dist/*.whl
+rack-power-autopilot
+```
 
-## Current scaffold state
+## Proof surface
 
-This leaf is a **scaffold**: contracts, tests, and a stub mechanism exist so another engineer/AI can fill production-grade code without inventing company affiliation.
+- `src/rack_power_autopilot.py` — telemetry/derating/admission engine
+- `src/rack_power_cli.py` — installable runtime
+- `tests/test_rack_power_autopilot.py` — contention, thermal, stale telemetry, hardware failure and partial-admission behavior
+- `tests/test_adversarial.py` — fail-closed adversarial coverage
+- `.github/workflows/tests.yml` — tests + cold-start + wheel build/install + installed CLI
+- `machine/` — existing Helix control-plane and promotion surfaces remain preserved
 
-| Surface | Path |
-|---------|------|
-| Mechanism stub | `src/rack_power_autopilot.py` |
-| Operate entry | `scripts/operate.py` |
-| Contract tests | `tests/` |
-| Target contract | `machine/target-contract.json` |
-| **AI fill-in brief** | **`DEV_UP_INSTRUCTIONS.md`** |
-| Issue contract | `ISSUE_CONTRACT.md` |
+## Current boundary
 
-## Non-claims
-
-- No CoreWeave employment, endorsement, proprietary data, or production use
-- No customer, revenue, latency, or scale claims without separate receipts
-- Scaffold tests define **intended behavior**, not verified production excellence
-
-## Next gate
-
-Create a simulated cluster failure benchmark with clearly bounded claims.
+This operates on supplied telemetry and job estimates. It does not control CoreWeave infrastructure or claim production-scale measurements. The next material depth step is a permitted simulator/telemetry adapter that feeds repeated rack observations through the same admission contract and measures recovery behavior under induced failures.
